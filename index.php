@@ -48,12 +48,12 @@ $data = [
 
 ];
 
-print_r($woocommerce->put('products/145', $data));
+print_r($woocommerce->put('products/34', $data));
 
 
 
 // ** Get the Specific products using ID **
-$product_ids = [80, 145];
+$product_ids = [80, 34];
 $response = $woocommerce->get('products', [
     'per_page' => 99,
     'include' => implode(',', $product_ids),
@@ -71,7 +71,7 @@ foreach ($response as $product) {
 
 
 //**Get the particular products with the categories id and products id
-$product_ids = [80, 145];
+$product_ids = [80, 34];
 $product_categories = [19, 20];
 
 
@@ -86,14 +86,100 @@ $response_categories = $woocommerce->get('products', [
   $merged_products = array_merge($response_ids, $response_categories);
 
 foreach ($merged_products as $product) {
-  // echo "<pre>";
-  // print_r($product);
+  echo "<pre>";
+  print_r($product);
 }
 
-  echo "<pre>";
- print_r($woocommerce->get('products'));
+//Delete the Particular Products
+echo "<pre>";
+// print_r($woocommerce->delete('products/79', ['force' => true])); 
 
 
-?>
 
+//Deleted the Multiple Products
+// $product_ids = [154, 155];
+echo "<pre>";
+foreach ($product_ids as $product_id) {
+    $response = $woocommerce->delete('products/' . $product_id, ['force' => true]);
+
+    if (!empty($response) && isset($response->id)) {
+        // Product deleted successfully
+        echo "Product ID {$product_id} deleted successfully.\n";
+        print_r($response);
+    } else {
+        // Product not deleted
+        echo "Failed to delete Product ID {$product_id}.\n";
+        print_r($response);
+    }
+}
+
+echo "</pre>";
+
+
+//Batch Updated Productcs
+$data = [
+    'create' => [
+        [
+            'name' => 'test one',
+            'type' => 'simple',
+            'regular_price' => '21.99',
+            'virtual' => true,
+            'downloadable' => true,
+            'downloads' => [
+                [
+                    'name' => 'Test one',
+                    'file' => 'http://demo.woothemes.com/woocommerce/wp-content/uploads/sites/56/2013/06/cd_4_angle.jpg'
+                ]
+            ],
+            'categories' => [
+                [
+                    'id' => 18
+                ],
+                [
+                    'id' => 20
+                ]
+            ],
+            'images' => [
+                [
+                    'src' => 'http://demo.woothemes.com/woocommerce/wp-content/uploads/sites/56/2013/06/cd_4_angle.jpg'
+                ]
+            ]
+        ],
+        [
+            'name' => 'Test Two',
+            'type' => 'simple',
+            'regular_price' => '21.99',
+            'description' => 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.',
+            'short_description' => 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.',
+            'categories' => [
+                [
+                    'id' => 18
+                ],
+                [
+                    'id' => 20
+                ]
+            ],
+            'images' => [
+                [
+                    'src' => 'http://demo.woothemes.com/woocommerce/wp-content/uploads/sites/56/2013/06/T_2_front.jpg'
+                ],
+                [
+                    'src' => 'http://demo.woothemes.com/woocommerce/wp-content/uploads/sites/56/2013/06/T_2_back.jpg'
+                ]
+            ]
+        ]
+    ],
+    'update' => [
+        [
+            'id' => 165,
+            'regular_price' => '299.45',  // Regular price of the product
+            'sale_price' => '199.59',     // Sale price of the product
+        ]
+    ],
+    'delete' => [
+        169
+    ]
+];
+
+print_r($woocommerce->post('products/batch', $data));
   
