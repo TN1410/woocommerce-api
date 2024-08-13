@@ -83,14 +83,15 @@ $response_categories = $woocommerce->get('products', [
     'per_page' => 99,
     'category' => implode(',', $product_categories)
 ]);
-$merged_products = array_merge($response_ids, $response_categories);
+  $merged_products = array_merge($response_ids, $response_categories);
 
 foreach ($merged_products as $product) {
-  echo "<pre>";
-  print_r($product);
+  // echo "<pre>";
+  // print_r($product);
 }
 
-
+  echo "<pre>";
+ print_r($woocommerce->get('products'));
 
 
 ?>
